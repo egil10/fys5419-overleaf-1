@@ -1,50 +1,62 @@
 \documentclass[twocolumn,10pt]{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%% LAYOUT & GEOMETRY %%%%%%%%%%
+%%%%%%%%%%%% LAYOUT & TEXT %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Replicates the tight margins of a scientific paper
-\usepackage[margin=0.7in, columnsep=0.25in]{geometry}
+\usepackage[margin=0.7in,columnsep=0.25in]{geometry}
 \usepackage[english]{babel}
-\usepackage{microtype}      % Micro-typography for cleaner text
-\usepackage{parskip}        % Handles paragraph spacing cleanly
+\usepackage{microtype}
 
-% Set paragraph indentation and spacing to match your preference
-\setlength{\parindent}{15pt}
-\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%% MATH, FONTS & TABLES %%%%%%%%
+%%%%%%%%%%%% FONTS & INPUT %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}        % The standard font you were using
-\usepackage{mathtools,amssymb,bm,graphicx}
+\usepackage{lmodern}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% MATH %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{mathtools,amssymb,bm}
+
+% Dirac notation
+\newcommand{\ket}[1]{\left| #1 \right\rangle}
+\newcommand{\bra}[1]{\left\langle #1 \right|}
+\newcommand{\braket}[2]{\left\langle #1 \middle| #2 \right\rangle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% FIGURES & FLOATS %%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
+\usepackage{float}
+
+\setlength{\textfloatsep}{8pt}
+\setlength{\floatsep}{6pt}
+\setlength{\intextsep}{6pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% TABLES %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \usepackage{booktabs,array,dcolumn,siunitx}
 \usepackage{tabularx,makecell,adjustbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% ALGORITHMS %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%% SECTIONS & CAPTIONS %%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\usepackage{titlesec}
-\usepackage[labelfont=bf,labelsep=period,font=small]{caption}
-
-% Replicates the tight section spacing
-\titlespacing*{\section}{0pt}{10pt}{4pt}
-\titlespacing*{\subsection}{0pt}{6pt}{3pt}
-\titlespacing*{\subsubsection}{0pt}{6pt}{3pt}
-\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
-
-% Bold figure captions (e.g., "Figure 1. Description")
-\captionsetup{figurename=Figure}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%% LISTINGS %%%%%%%%%%%%%%
+%%%%%%%%%%%% CODE LISTINGS %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{listings}
@@ -74,35 +86,71 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%
+%%%%%%%%%%%% HEADINGS & CAPTIONS %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Enables \parencite and \textcite
+\usepackage{titlesec}
+\usepackage[labelfont=bf,labelsep=period,font=small]{caption}
+
+\titleformat{\section}
+  {\large\bfseries}
+  {\thesection}{0.8em}{}
+
+\titleformat{\subsection}
+  {\normalsize\bfseries}
+  {\thesubsection}{0.8em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\itshape}
+  {\thesubsubsection}{0.8em}{}
+
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+\titlespacing*{\subsection}{0pt}{7pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{6pt}{2pt}
+
+\captionsetup{figurename=Figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99]{biblatex}
-\addbibresource{bib.bib} % <-- change to your .bib filename
+\addbibresource{bib.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%% HYPERLINKS & REFS %%%%%%%%%%%
+%%%%%%%%%%%% LINKS & REFS %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage{cleveref}
+
 \crefname{lstlisting}{Listing}{Listings}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+
 \input{01 FRONTMATTER}
 \input{10 INTRO}
 \input{11 METHOD}
 \input{12 RESULT}
 \input{13 CONCLUSION}
+
 \clearpage
 \input{98 BIB}
+
 \clearpage
 \onecolumn
 \input{99 APPENDIX}
 
 \end{document}
+
+% Part A: 15%
+% Part B: 10%
+% Part C: 10%
+% Part D: 15%
+% Part E: 15%
+% Part F: 15%
+% Part G: 20%
