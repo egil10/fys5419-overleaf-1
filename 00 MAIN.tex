@@ -9,7 +9,7 @@
 \usepackage{microtype}
 
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{10pt}
+\setlength{\parskip}{4pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%% FONTS & INPUT %%%%%%%%%%%%
@@ -55,35 +55,31 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%% CODE LISTINGS %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \usepackage{listings}
 \usepackage{xcolor}
 
-\definecolor{codebg}{RGB}{245,245,244}
-\definecolor{codekey}{RGB}{0,0,180}
-\definecolor{codestr}{RGB}{163,21,21}
-\definecolor{codecom}{RGB}{0,128,0}
+\definecolor{codegray}{gray}{0.96}
 
-\lstdefinestyle{pythonstyle}{
-    language=Python,
-    backgroundcolor=\color{codebg},
-    frame=single,
-    rulecolor=\color{gray!40},
-    basicstyle=\ttfamily\small,
-    keywordstyle=\color{codekey}\bfseries,
-    stringstyle=\color{codestr},
-    commentstyle=\color{codecom}\itshape,
-    numbers=left,
-    numbersep=6pt,
-    numberstyle=\tiny\color{gray},
-    breaklines=true,
-    showstringspaces=false,
-    xleftmargin=10pt,
-    xrightmargin=5pt
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  rulecolor=\color{black!25},
+  numbers=left,
+  numberstyle=\tiny\color{black!60},
+  numbersep=8pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  xleftmargin=1.8em,
+  framexleftmargin=1.2em
 }
+
+\lstset{style=python}
+\renewcommand{\lstlistingname}{Listing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%% HEADINGS & CAPTIONS %%%%%%

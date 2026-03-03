@@ -1,9 +1,8 @@
 \section{Methods}\label{section:methods}
 
-\subsection{Methods used in Part A}
+\subsection{Part A methods}
 
 One-Qubit bases
-
 \begin{equation}\label{single-qubits}
     \ket{0} = \begin{pmatrix}
         1\\0
@@ -14,7 +13,6 @@ One-Qubit bases
 \end{equation}
 
 Pauli Matrices
-
 \begin{equation}\label{pauli-matrices}
     \sigma_x=\begin{pmatrix}
         0&1\\1&0
@@ -28,7 +26,6 @@ Pauli Matrices
 \end{equation}
 
 Hadamard and Phase Gates
-
 \begin{equation}
     H = \frac{1}{\sqrt{2}}\begin{pmatrix}
         1&1\\1&-1
@@ -39,13 +36,11 @@ Hadamard and Phase Gates
 \end{equation}
 
 Kronecker products for basis states
-
 \begin{equation}
 \ket{00} = \ket{0} \otimes \ket{0}
 \quad
 \ket{01} = \ket{0} \otimes \ket{1}
 \end{equation}
-
 \begin{equation}
 \ket{10} = \ket{1} \otimes \ket{0}
 \quad
@@ -53,13 +48,11 @@ Kronecker products for basis states
 \end{equation}
 
 Bell states
-
 \begin{equation}
 \ket{\Phi^+} = \frac{\ket{00} + \ket{11}}{\sqrt{2}}
 \quad
 \ket{\Phi^-} = \frac{\ket{00} - \ket{11}}{\sqrt{2}}
 \end{equation}
-
 \begin{equation}
 \ket{\Psi^+} = \frac{\ket{01} + \ket{10}}{\sqrt{2}}
 \quad
@@ -75,33 +68,20 @@ Bell states
     \end{pmatrix}
 \end{equation}
 
-
-
-\subsection{Methods used in Part B}
-
-We define a symmetric matrix $H\in\mathbb{R}^{2\times2}$
+\subsection{Part B methods}
 
 \begin{equation}
-    H=\begin{bmatrix}
+    H=H_0+H_1=\begin{bmatrix}
         H_{11} & H_{12} \\
         H_{21} & H_{22}
     \end{bmatrix}
 \end{equation}
 
-We let $H=H_0+H_1$ where
-
 \begin{equation}
     H_0=\begin{bmatrix}
         E_1 & 0 \\
         0 & E_2
-    \end{bmatrix}
-\end{equation}
-
-is a diagonal matrix.
-
-Similarly,
-
-\begin{equation}
+    \end{bmatrix}\quad
     H_1=\begin{bmatrix}
         V_{11} & V_{12} \\
         V_{21} & V_{22}
@@ -109,12 +89,9 @@ Similarly,
 \end{equation}
 
 Where $V_{ij}$ represents various interaction matrix elements. We can view $H_0$ as the non-interacting solution
-
 \begin{equation}
-    H_0\ket{0} = E_1\ket{0}
-\end{equation}
-
-\begin{equation}
+    H_0\ket{0} = E_1\ket{0} 
+    \quad 
     H_0\ket{1}=E_2\ket{1}
 \end{equation}
 
@@ -122,33 +99,29 @@ We rewrite $H$ with $H_0$ and $H_1$ via Pauli matrices
 
 \begin{equation}
     H_0=\mathcal{E}I+\Omega\sigma_Z
-\end{equation}
-
-\begin{equation}
-    \mathcal{E} = \frac{E_1+E_2}{2}
-\end{equation}
-
-\begin{equation}
-    \Omega=\frac{E_1-E_2}{2}
-\end{equation}
-
-\begin{equation}
+    \quad
     H_I=c\textbf{I}+\omega_z\sigma_z+\omega_x\sigma_x
 \end{equation}
 
 \begin{equation}
+    \mathcal{E} = \frac{E_1+E_2}{2}
+    \quad
+    \Omega=\frac{E_1-E_2}{2}
+    \quad 
+    \textbf{I}=\begin{pmatrix}
+        1&0\\0&1
+    \end{pmatrix}
+\end{equation}
+
+\begin{equation}
     c=\frac{V_{11}+V_{22}}{2}
-\end{equation}
-
-\begin{equation}
+    \quad
     \omega_z=\frac{V_{11}-V_{22}}{2}
-\end{equation}
-
-\begin{equation}
+    \quad
     \omega_x=V_{12}=V_{21}
 \end{equation}
 
-We let our Hamiltonian depend linearly on a strenght parameter $\lambda$
+We let our Hamiltonian depend linearly on a strength parameter $\lambda$
 
 \begin{equation}
     H=H_0+\lambda H_1
@@ -156,13 +129,73 @@ We let our Hamiltonian depend linearly on a strenght parameter $\lambda$
 
 with $\lambda\in[0,1]$ and limits $\lambda=0$, $\lambda=1$.
 
-\subsection{Methods used in Part C}
+\subsection{Part C methods}
 
-\subsection{Methods used in Part D}
+\subsection{Part D methods}
 
-\subsection{Methods used in Part E}
+\begin{equation}
+    \ket{0}_{A,B} = [1\quad0]^T \quad \ket{1}_{A,B}=[0\quad1]^T
+\end{equation}
+\begin{equation}
+    \ket{00}=\ket{0}_A\otimes\ket{0}_B=[1\quad0\quad0\quad0]^T
+\end{equation}
+\begin{equation}
+    \ket{01}=\ket{0}_A\otimes\ket{1}_B=[0\quad1\quad0\quad0]^T
+\end{equation}
+\begin{equation}
+    \ket{10}=\ket{1}_A\otimes\ket{0}_B=[0\quad0\quad1\quad0]^T
+\end{equation}
+\begin{equation}
+    \ket{11}=\ket{1}_A\otimes\ket{1}_B=[0\quad0\quad0\quad1]^T
+\end{equation}
 
-\subsection{Methods used in Part F}
+\begin{equation}
+    H_0\ket{00} = \epsilon_{00}\ket{00}
+\end{equation}
+\begin{equation}
+    H_0\ket{10} = \epsilon_{10}\ket{10}
+\end{equation}
+\begin{equation}
+    H_0\ket{01} = \epsilon_{01}\ket{01}
+\end{equation}
+\begin{equation}
+    H_0\ket{11} = \epsilon_{11}\ket{11}
+\end{equation}
+
+\begin{equation}
+    H_I=H_x\sigma_x\otimes\sigma_x+H_z\sigma_z\otimes\sigma_z
+\end{equation}
+
+\begin{equation}
+    \mathbf{H} = \begin{bmatrix}
+        \epsilon_{00}+H_z & 0 & 0 & H_x \\
+        0 & \epsilon_{10}-H_z & H_x & 0 \\
+        0 & H_x & \epsilon_{01}-H_z & 0 \\
+        H_x & 0 & 0 & \epsilon_{11}+H_z
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    \rho_0 = 
+    (\alpha_{00}\ket{00}\bra{00} + 
+    \alpha_{10}\ket{10}\bra{10} +
+    \alpha_{01}\ket{01}\bra{01} +
+    \alpha_{11}\ket{11}\bra{11})
+\end{equation}
+\begin{equation}
+    \rho_A=\text{Tr}_B(\rho_0)=\bra{0}\rho_0\ket{0}_B+\bra{1}\rho_0\ket{1}_B
+\end{equation}
+\begin{equation}
+    \rho_B=\text{Tr}_A(\rho_0)=\bra{0}\rho_0\ket{0}_A+\bra{1}\rho_0\ket{1}_A
+\end{equation}
+\begin{equation}
+    S(A,B)=-\text{Tr}(\rho_{A,B}\log_2(\rho_{A,B}))
+\end{equation}
+
+
+\subsection{Part E methods}
+
+\subsection{Part F methods}
 
 $H=H_0+H_1+H_2$
 
@@ -210,4 +243,4 @@ For $J=2$ we have a $5\times5$ matrix given by
     \end{pmatrix}
 \end{equation}
 
-\subsection{Methods used in Part G}
+\subsection{Part G methods}
