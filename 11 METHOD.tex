@@ -1,8 +1,9 @@
 \section{Methods}\label{section:methods}
 
-\subsection{Part A methods}
+\subsection{Initial definitions}
 
-One-Qubit bases
+First, we introduce some basic components as part of QML. One-qubit bases $\ket{0}$ and $\ket{1}$ are defined in \cref{single-qubits}.
+
 \begin{equation}\label{single-qubits}
     \ket{0} = \begin{pmatrix}
         1\\0
@@ -12,7 +13,15 @@ One-Qubit bases
     \end{pmatrix}
 \end{equation}
 
-Pauli Matrices
+Using these one-qubit bases, we can write quantum states as a linear combination as shown in \cref{quantum-states}, or using the Bloch-sphere representation rewritten as in \cref{bloch-sphere}
+\begin{equation}\label{quantum-states}
+    \ket{\psi} = \alpha\ket{0}+\beta\ket{1}
+\end{equation}
+\begin{equation}\label{bloch-sphere}
+    \ket{\psi}=\cos\left(\frac{\theta}{2}\right)\ket{0}+\sin\left(\frac{\theta}{2}\right)\exp{(i\phi)}\ket{0}
+\end{equation}
+
+Quantum algorithms are typically formulated using Pauli operators $\sigma_x,\space\sigma_y,\space\sigma_z$ as seen in \cref{pauli-matrices} and a small universal set of quantum gates that act on qubits. The Pauli matrices together with the identity $\textbf{I}$, form a convenient operator basis for expressing quantum Hamiltonians and observables. 
 \begin{equation}\label{pauli-matrices}
     \sigma_x=\begin{pmatrix}
         0&1\\1&0
@@ -25,50 +34,78 @@ Pauli Matrices
     \end{pmatrix}
 \end{equation}
 
-Hadamard and Phase Gates
-\begin{equation}
-    H = \frac{1}{\sqrt{2}}\begin{pmatrix}
-        1&1\\1&-1
-    \end{pmatrix}\quad
-    S = \begin{pmatrix}
-        1&0\\0&-i
-    \end{pmatrix}
+In practical implementations, these operators are realized through elementary gates such as the Hadamard gate, which creates superposition, the phase gate, which introduces controlled phase shifts, and the controlled-NOT gate, which generates entanglement between qubits. All as seen in \cref{quantum-gates}. These gates form a standard set of building blocks for constructing quantum circuits and implementing algorithms such as the VQE.
+\begin{equation}\label{quantum-gates}
+\begin{array}{cc}
+H = \frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1 & 1\\
+1 & -1
+\end{pmatrix}
+&
+S =
+\begin{pmatrix}
+1 & 0\\
+0 & -i
+\end{pmatrix}
+\\[12pt]
+\multicolumn{2}{c}{
+\text{CNOT} =
+\begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 1 & 0
+\end{pmatrix}}
+\end{array}
 \end{equation}
 
-Kronecker products for basis states
-\begin{equation}
-\ket{00} = \ket{0} \otimes \ket{0}
-\quad
-\ket{01} = \ket{0} \otimes \ket{1}
-\end{equation}
-\begin{equation}
-\ket{10} = \ket{1} \otimes \ket{0}
-\quad
-\ket{11} = \ket{1} \otimes \ket{1}
-\end{equation}
-
-Bell states
-\begin{equation}
-\ket{\Phi^+} = \frac{\ket{00} + \ket{11}}{\sqrt{2}}
-\quad
-\ket{\Phi^-} = \frac{\ket{00} - \ket{11}}{\sqrt{2}}
-\end{equation}
-\begin{equation}
-\ket{\Psi^+} = \frac{\ket{01} + \ket{10}}{\sqrt{2}}
-\quad
-\ket{\Psi^-} = \frac{\ket{01} - \ket{10}}{\sqrt{2}}
+\subsection{Tensor products and two-qubit states}
+When describing systems of multiple qubits, the Hilbert space of the composite system is constructed using tensor (Kronecker) products of the individual qubit states as seen in \cref{kronecker-products}. This allows basis states of multi-qubit systems to be written as products of the single-qubit computational basis states $\ket{0}$ and $\ket{1}$. For a two-qubit system the computational basis therefore consists of the four states $[\ket{00}\space\ket{01}\space\ket{01}\space\ket{11}]$, obtained through tensor products of the single-qubit states.
+\begin{equation}\label{kronecker-products}
+\begin{aligned}
+\ket{00} &= \ket{0} \otimes \ket{0} &
+\ket{01} &= \ket{0} \otimes \ket{1} \\
+\ket{10} &= \ket{1} \otimes \ket{0} &
+\ket{11} &= \ket{1} \otimes \ket{1}
+\end{aligned}
 \end{equation}
 
-\begin{equation}
-    \text{CNOT} = \begin{pmatrix}
-        1&0&0&0\\
-        0&1&0&0\\
-        0&0&0&1\\
-        0&0&1&0
-    \end{pmatrix}
+Certain superpositions of these two-qubit basis states form maximally entangled states known as Bell states as seen in \cref{bell-states}. These states play an important role in quantum information theory and serve as fundamental examples of quantum entanglement between two qubits. 
+\begin{equation}\label{bell-states}
+\begin{aligned}
+\ket{\Phi^+} &= \frac{\ket{00} + \ket{11}}{\sqrt{2}} &
+\ket{\Phi^-} &= \frac{\ket{00} - \ket{11}}{\sqrt{2}} \\
+\ket{\Psi^+} &= \frac{\ket{01} + \ket{10}}{\sqrt{2}} &
+\ket{\Psi^-} &= \frac{\ket{01} - \ket{10}}{\sqrt{2}}
+\end{aligned}
 \end{equation}
 
-\subsection{Part B methods}
+For composite quantum systems, operators acting on multiple qubits are constructed using tensor products of single-qubit operators. If an operator $A$ acts on the first qubit and an operator $B$ acts on the second qubit, the combined operator acting on the two-qubit system is written as $A \otimes B$. In this way, Hamiltonians and quantum gates for multi-qubit systems can be expressed in terms of tensor products of Pauli matrices and the identity operator.
+
+As an example, the operator $I \otimes \sigma_x$ flips the second qubit while leaving the first qubit unchanged. In the computational basis $\{\ket{00},\ket{01},\ket{10},\ket{11}\}$ this operator is given in \cref{I-otimes-sigma}.
+\begin{equation}\label{I-otimes-sigma}
+I \otimes \sigma_x =
+\begin{pmatrix}
+0 & 1 & 0 & 0 \\
+1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 1 & 0
+\end{pmatrix}.
+\end{equation}
+
+Similarly, tensor products between Pauli operators act on both qubits simultaneously. For example, the operator $\sigma_x \otimes \sigma_x$ flips both qubits as seen in \cref{sigmax-otimes-sigmax}.
+\begin{equation}\label{sigmax-otimes-sigmax}
+\sigma_x \otimes \sigma_x =
+\begin{pmatrix}
+0 & 0 & 0 & 1 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+1 & 0 & 0 & 0
+\end{pmatrix}.
+\end{equation}
+
+\subsection{Eigenvalue analysis}
 
 \begin{equation}
     H=H_0+H_1=\begin{bmatrix}
@@ -128,6 +165,8 @@ We let our Hamiltonian depend linearly on a strength parameter $\lambda$
 \end{equation}
 
 with $\lambda\in[0,1]$ and limits $\lambda=0$, $\lambda=1$.
+
+In this first example, we seek to solve the problem \textbf{by standard eigenvalue solvers}, and as such we use the Python package \texttt{np.linalg.eigh(H)} where \texttt{import numpy as np} and \texttt{H} is a Hamiltonian. 
 
 \subsection{Part C methods}
 
@@ -192,8 +231,9 @@ with $\lambda\in[0,1]$ and limits $\lambda=0$, $\lambda=1$.
     S(A,B)=-\text{Tr}(\rho_{A,B}\log_2(\rho_{A,B}))
 \end{equation}
 
-
 \subsection{Part E methods}
+
+\texttt{Qiskit} and \texttt{Pennylane}
 
 \subsection{Part F methods}
 
