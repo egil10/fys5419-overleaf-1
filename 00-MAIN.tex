@@ -34,6 +34,7 @@
 %%%%%%%%%%%% FIGURES & FLOATS %%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{float}
 
@@ -110,7 +111,12 @@
 %%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99]{biblatex}
+\usepackage[
+backend=biber,
+style=authoryear,
+maxcitenames=2,
+maxbibnames=99
+]{biblatex}
 \addbibresource{bib.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -128,16 +134,17 @@
 
 \begin{document}
 
-\input{01 FRONTMATTER}
-\input{10 INTRO}
-\input{11 METHOD}
-\input{12 RESULT}
-\input{13 CONCLUSION}
+\input{01-FRONTMATTER}
+\input{10-INTRO}
+\input{11-METHOD}
+\input{12-RESULT}
+\input{13-CONCLUSION}
 \clearpage
-\input{98 BIB}
+\input{14-MIDRULE}
+\printbibliography
 \clearpage
 \onecolumn
-\input{99 APPENDIX}
+\input{99-APPENDIX}
 
 \end{document}
 
