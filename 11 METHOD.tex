@@ -18,7 +18,7 @@ Using these one-qubit bases, we can write quantum states as a linear combination
     \ket{\psi} = \alpha\ket{0}+\beta\ket{1}
 \end{equation}
 \begin{equation}\label{bloch-sphere}
-    \ket{\psi}=\cos\left(\frac{\theta}{2}\right)\ket{0}+\sin\left(\frac{\theta}{2}\right)\exp{(i\phi)}\ket{0}
+    \ket{\psi}=\cos\left(\frac{\theta}{2}\right)\ket{0}+\sin\left(\frac{\theta}{2}\right)e^{i\phi}\ket{1}
 \end{equation}
 
 Quantum algorithms are typically formulated using Pauli operators $\sigma_x,\space\sigma_y,\space\sigma_z$ as seen in \cref{pauli-matrices} and a small universal set of quantum gates that act on qubits. The Pauli matrices together with the identity $\textbf{I}$, form a convenient operator basis for expressing quantum Hamiltonians and observables. 
@@ -132,12 +132,10 @@ Furthermore, the Hamiltonian is decomposed into $H=H_0+H_1$, with a solvable non
     \end{bmatrix}
 \end{equation}
 
-Any $2\times2$ Hamiltonian can be expressed using the Pauli operator basis together with the identity operator, as in \cref{H-ai-bsigma}. For the present system this leads to the identities seen in \cref{H0-H1-decomp} with \cref{mathcal-E-Omega}. 
-\begin{equation}\label{H-ai-bsigma}
-    H=aI+b\sigma_x+c\sigma_y+d\sigma_z
-\end{equation}
+Any $2\times2$ Hamiltonian can be expressed using the Pauli operator basis together with the identity operator. For the present system this leads to the identities seen in \cref{H0-H1-decomp} with \cref{mathcal-E-Omega}. 
 \begin{equation}\label{H0-H1-decomp}
 \begin{aligned}
+    H&=aI+b\sigma_x+c\sigma_y+d\sigma_z\\
     H_0 &= \mathcal{E}I + \Omega\sigma_z \\
     H_1 &= cI + \omega_z\sigma_z + \omega_x\sigma_x
 \end{aligned}
@@ -151,7 +149,7 @@ Now, we can move on to the analytical eigenvalue solution, where the eigenvalues
     \det(H-EI)=0
 \end{equation}
 
-For a general $2\times2$ Hamiltonian in \cref{general-hamiltonian} the resulting energy eigenvalues can be found in \cref{energy-eigenvalues}.
+For a general $2\times2$ Hamiltonian in \cref{general-hamiltonian} the resulting energy eigenvalues can be found in \cref{energy-eigenvalues}. Using this, the lowest eigenvalue corresponds to the ground state energy of the system.
 \begin{equation}\label{general-hamiltonian}
     H=\begin{pmatrix}
         a&b\\b&d
@@ -159,165 +157,48 @@ For a general $2\times2$ Hamiltonian in \cref{general-hamiltonian} the resulting
 \end{equation}
 \begin{equation}\label{energy-eigenvalues}
     E_{\pm} = \frac{a+d}{2}\pm\sqrt{\left(\frac{a-d}{2}\right)^2+b^2}
-\end{equation}
-Using this, the lowest eigenvalue corresponds to the ground state energy of the system. 
+\end{equation} 
 
-Where $V_{ij}$ represents various interaction matrix elements. We can view $H_0$ as the non-interacting solution
-\begin{equation}
-    H_0\ket{0} = E_1\ket{0} 
-    \quad 
-    H_0\ket{1}=E_2\ket{1}
-\end{equation}
-
-We rewrite $H$ with $H_0$ and $H_1$ via Pauli matrices
-
-\begin{equation}
-    H_0=\mathcal{E}I+\Omega\sigma_Z
-    \quad
-    H_I=c\textbf{I}+\omega_z\sigma_z+\omega_x\sigma_x
-\end{equation}
-
-\begin{equation}
-    \mathcal{E} = \frac{E_1+E_2}{2}
-    \quad
-    \Omega=\frac{E_1-E_2}{2}
-    \quad 
-    \textbf{I}=\begin{pmatrix}
-        1&0\\0&1
-    \end{pmatrix}
-\end{equation}
-
-\begin{equation}
-    c=\frac{V_{11}+V_{22}}{2}
-    \quad
-    \omega_z=\frac{V_{11}-V_{22}}{2}
-    \quad
-    \omega_x=V_{12}=V_{21}
-\end{equation}
-
-We let our Hamiltonian depend linearly on a strength parameter $\lambda$
-
-\begin{equation}
+To study the effects of interactions in \cref{hamilton-interaction}, the Hamiltonian is parametrised by a coupling parameter $\lambda\in[0,1]$, where the limits $\lambda=0$ and $\lambda=1$ correspond to the non-interacting and fully interacting systems respectively.
+\begin{equation}\label{hamilton-interaction}
     H=H_0+\lambda H_1
 \end{equation}
 
-with $\lambda\in[0,1]$ and limits $\lambda=0$, $\lambda=1$.
+The Hamiltonian is diagonalised numerically to obtain its eigenvalues and eigenvectors. For Hermitian matrices this is efficiently performed using the \texttt{numpy} package in \texttt{python} 
+\begin{lstlisting}
+    np.linalg.eigh(H)
+\end{lstlisting}
 
-In this first example, we seek to solve the problem \textbf{by standard eigenvalue solvers}, and as such we use the Python package \texttt{np.linalg.eigh(H)} where \texttt{import numpy as np} and \texttt{H} is a Hamiltonian. 
+\subsection{Variational Quantum Eigensolver (VQE)}
 
-\subsection{Part C methods}
-
-\subsection{Part D methods}
-
-\begin{equation}
-    \ket{0}_{A,B} = [1\quad0]^T \quad \ket{1}_{A,B}=[0\quad1]^T
-\end{equation}
-\begin{equation}
-    \ket{00}=\ket{0}_A\otimes\ket{0}_B=[1\quad0\quad0\quad0]^T
-\end{equation}
-\begin{equation}
-    \ket{01}=\ket{0}_A\otimes\ket{1}_B=[0\quad1\quad0\quad0]^T
-\end{equation}
-\begin{equation}
-    \ket{10}=\ket{1}_A\otimes\ket{0}_B=[0\quad0\quad1\quad0]^T
-\end{equation}
-\begin{equation}
-    \ket{11}=\ket{1}_A\otimes\ket{1}_B=[0\quad0\quad0\quad1]^T
+VQE is based on the variational principle, for any normalised trial state $\ket{\psi(\theta)}$, the expectation value of the Hamiltonian provides an upper bound to the true ground state energy. The goal VQE is therefore to minimize the energy expectation value ewith respect to the circuit parameter $\theta$ shown in \cref{minimum-expectation}. 
+\begin{equation}\label{minimum-expectation}
+    E_0\leq\min_\theta\bra{\psi(\theta)}H\ket{\psi(\theta)}
 \end{equation}
 
-\begin{equation}
-    H_0\ket{00} = \epsilon_{00}\ket{00}
-\end{equation}
-\begin{equation}
-    H_0\ket{10} = \epsilon_{10}\ket{10}
-\end{equation}
-\begin{equation}
-    H_0\ket{01} = \epsilon_{01}\ket{01}
-\end{equation}
-\begin{equation}
-    H_0\ket{11} = \epsilon_{11}\ket{11}
+A parameterized quantum circuit $U(\theta)$ prepares a trial state from a simple initial computational basis state. By varying the parameters $\theta$, the circuit explores different candidate states in \cref{parameterized-psi}
+\begin{equation}\label{parameterized-psi}
+    \ket{\psi(\theta)}=U(\theta)\ket{0}^{\otimes n}
 \end{equation}
 
-\begin{equation}
-    H_I=H_x\sigma_x\otimes\sigma_x+H_z\sigma_z\otimes\sigma_z
+To evaluate the energy on a quantum computer, the Hamiltonian is expressed as a weighted sum of tensor products of Pauli operators, in \cref{c-P-pauli}. Each term can then be measured seperately on the quantum circuit, where $c_k$ are the real coefficients and $P_k$ are Pauli strings acting on the qubits.
+\begin{equation}\label{c-P-pauli}
+    H=\sum_k c_kP_k 
+    \quad
+    P_k\in\{I,X,Y,Z\}^{\otimes n}
 \end{equation}
 
-\begin{equation}
-    \mathbf{H} = \begin{bmatrix}
-        \epsilon_{00}+H_z & 0 & 0 & H_x \\
-        0 & \epsilon_{10}-H_z & H_x & 0 \\
-        0 & H_x & \epsilon_{01}-H_z & 0 \\
-        H_x & 0 & 0 & \epsilon_{11}+H_z
-    \end{bmatrix}
+The VQE cost function is the expectation value of the Hamiltonian with respect to the trial state. Using the Pauli decomposition, the energy can be written as a sum of expectation values of Pauli operators in \cref{E-theta-bra-psi}.
+\begin{equation}\label{E-theta-bra-psi}
+    E(\theta)=\bra{\psi(\theta)}H\ket{\psi(\theta)} = \sum_k c_k \langle P_k \rangle_\theta
 \end{equation}
 
-\begin{equation}
-    \rho_0 = 
-    (\alpha_{00}\ket{00}\bra{00} + 
-    \alpha_{10}\ket{10}\bra{10} +
-    \alpha_{01}\ket{01}\bra{01} +
-    \alpha_{11}\ket{11}\bra{11})
-\end{equation}
-\begin{equation}
-    \rho_A=\text{Tr}_B(\rho_0)=\bra{0}\rho_0\ket{0}_B+\bra{1}\rho_0\ket{1}_B
-\end{equation}
-\begin{equation}
-    \rho_B=\text{Tr}_A(\rho_0)=\bra{0}\rho_0\ket{0}_A+\bra{1}\rho_0\ket{1}_A
-\end{equation}
-\begin{equation}
-    S(A,B)=-\text{Tr}(\rho_{A,B}\log_2(\rho_{A,B}))
+A classical optimizer updates the circuit parameter iteratively in order to reduce the energy expectation value. Conceptually, this can be written as an update rule, where $\eta$ is a learning rate or step size, as in \cref{nabla-theta}.
+\begin{equation}\label{nabla-theta}
+    \theta_{t+1} = \theta_t - \eta\nabla_{\theta}E(\theta_t)
 \end{equation}
 
-\subsection{Part E methods}
-
-\texttt{Qiskit} and \texttt{Pennylane}
-
-\subsection{Part F methods}
-
-$H=H_0+H_1+H_2$
-
-\begin{equation}
-    H_0=\frac{1}{2}\varepsilon\sum_{p\sigma}\sigma a_{p\sigma}^{\dagger}a_{p\sigma}
+After convergence, the optimal parameters $\theta^*$ define the approximate ground state prepared by the circuit. The estimated ground state energy is then shown in \cref{ground-staet-E}.
+\begin{equation}\label{ground-staet-E}
+    E_{\text{VQE}} = E(\theta)
 \end{equation}
-
-\begin{equation}
-    H_1=\frac{1}{2}V\sum_{p,p',\sigma}\sigma a_{p\sigma}^{\dagger}a_{p\sigma}
-\end{equation}
-
-\begin{equation}
-    H_2=\frac{1}{2}W\sum_{p,p',\sigma}a_{p\sigma}^{\dagger}a_{p'\sigma}^{\dagger}a_{p'-\sigma}a_{p-\sigma}
-\end{equation}
-
-\begin{equation}
-    H_0=\varepsilon J_z
-\end{equation}
-
-\begin{equation}
-    H_1=\frac{1}{2}V(J_+^2+J_-^2)
-\end{equation}
-
-\begin{equation}
-    H_2=\frac{1}{2}W(-N+J_+J_-+J_-J_+)
-\end{equation}
-
-\begin{equation}
-    H_{J=1} = \begin{pmatrix}
-        -\epsilon & 0 & -V \\
-        0 & 0 & 0 \\
-        -V & 0 & \epsilon
-    \end{pmatrix}
-\end{equation}
-
-For $J=2$ we have a $5\times5$ matrix given by
-
-\begin{equation}
-    H_{J=2}=\begin{pmatrix}
-        -2\epsilon & 0 & \sqrt{6}V & 0 & 0 \\
-        0 & -\epsilon + 3W  & 0 & 3V & 0 \\
-        \sqrt{6}V & 0 & 4W & 0 & \sqrt{6}V \\
-        0 & 3V & 0 & \epsilon+3W & 0 \\
-        0 & 0& \sqrt{6}V & 0 & 2\varepsilon
-    \end{pmatrix}
-\end{equation}
-
-\subsection{Part G methods}

@@ -1,3 +1,6 @@
+
+
+
 \documentclass[amssymb,twocolumn,aps]{revtex4}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,3 +137,123 @@
 \onecolumngrid
 \input{99 APPENDIX}
 \end{document}
+
+
+
+
+
+%%%%%%%%%%%%
+\subsection{Part D methods}
+
+\begin{equation}
+    \ket{0}_{A,B} = [1\quad0]^T \quad \ket{1}_{A,B}=[0\quad1]^T
+\end{equation}
+\begin{equation}
+    \ket{00}=\ket{0}_A\otimes\ket{0}_B=[1\quad0\quad0\quad0]^T
+\end{equation}
+\begin{equation}
+    \ket{01}=\ket{0}_A\otimes\ket{1}_B=[0\quad1\quad0\quad0]^T
+\end{equation}
+\begin{equation}
+    \ket{10}=\ket{1}_A\otimes\ket{0}_B=[0\quad0\quad1\quad0]^T
+\end{equation}
+\begin{equation}
+    \ket{11}=\ket{1}_A\otimes\ket{1}_B=[0\quad0\quad0\quad1]^T
+\end{equation}
+
+\begin{equation}
+    H_0\ket{00} = \epsilon_{00}\ket{00}
+\end{equation}
+\begin{equation}
+    H_0\ket{10} = \epsilon_{10}\ket{10}
+\end{equation}
+\begin{equation}
+    H_0\ket{01} = \epsilon_{01}\ket{01}
+\end{equation}
+\begin{equation}
+    H_0\ket{11} = \epsilon_{11}\ket{11}
+\end{equation}
+
+\begin{equation}
+    H_I=H_x\sigma_x\otimes\sigma_x+H_z\sigma_z\otimes\sigma_z
+\end{equation}
+
+\begin{equation}
+    \mathbf{H} = \begin{bmatrix}
+        \epsilon_{00}+H_z & 0 & 0 & H_x \\
+        0 & \epsilon_{10}-H_z & H_x & 0 \\
+        0 & H_x & \epsilon_{01}-H_z & 0 \\
+        H_x & 0 & 0 & \epsilon_{11}+H_z
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    \rho_0 = 
+    (\alpha_{00}\ket{00}\bra{00} + 
+    \alpha_{10}\ket{10}\bra{10} +
+    \alpha_{01}\ket{01}\bra{01} +
+    \alpha_{11}\ket{11}\bra{11})
+\end{equation}
+\begin{equation}
+    \rho_A=\text{Tr}_B(\rho_0)=\bra{0}\rho_0\ket{0}_B+\bra{1}\rho_0\ket{1}_B
+\end{equation}
+\begin{equation}
+    \rho_B=\text{Tr}_A(\rho_0)=\bra{0}\rho_0\ket{0}_A+\bra{1}\rho_0\ket{1}_A
+\end{equation}
+\begin{equation}
+    S(A,B)=-\text{Tr}(\rho_{A,B}\log_2(\rho_{A,B}))
+\end{equation}
+
+\subsection{Part E methods}
+
+\texttt{Qiskit} and \texttt{Pennylane}
+
+\subsection{Part F methods}
+
+$H=H_0+H_1+H_2$
+
+\begin{equation}
+    H_0=\frac{1}{2}\varepsilon\sum_{p\sigma}\sigma a_{p\sigma}^{\dagger}a_{p\sigma}
+\end{equation}
+
+\begin{equation}
+    H_1=\frac{1}{2}V\sum_{p,p',\sigma}\sigma a_{p\sigma}^{\dagger}a_{p\sigma}
+\end{equation}
+
+\begin{equation}
+    H_2=\frac{1}{2}W\sum_{p,p',\sigma}a_{p\sigma}^{\dagger}a_{p'\sigma}^{\dagger}a_{p'-\sigma}a_{p-\sigma}
+\end{equation}
+
+\begin{equation}
+    H_0=\varepsilon J_z
+\end{equation}
+
+\begin{equation}
+    H_1=\frac{1}{2}V(J_+^2+J_-^2)
+\end{equation}
+
+\begin{equation}
+    H_2=\frac{1}{2}W(-N+J_+J_-+J_-J_+)
+\end{equation}
+
+\begin{equation}
+    H_{J=1} = \begin{pmatrix}
+        -\epsilon & 0 & -V \\
+        0 & 0 & 0 \\
+        -V & 0 & \epsilon
+    \end{pmatrix}
+\end{equation}
+
+For $J=2$ we have a $5\times5$ matrix given by
+
+\begin{equation}
+    H_{J=2}=\begin{pmatrix}
+        -2\epsilon & 0 & \sqrt{6}V & 0 & 0 \\
+        0 & -\epsilon + 3W  & 0 & 3V & 0 \\
+        \sqrt{6}V & 0 & 4W & 0 & \sqrt{6}V \\
+        0 & 3V & 0 & \epsilon+3W & 0 \\
+        0 & 0& \sqrt{6}V & 0 & 2\varepsilon
+    \end{pmatrix}
+\end{equation}
+
+\subsection{Part G methods}
