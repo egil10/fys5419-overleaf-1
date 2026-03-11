@@ -34,7 +34,7 @@ Quantum algorithms are typically formulated using Pauli operators $\sigma_x,\spa
     \end{pmatrix}
 \end{equation}
 
-In practical implementations, these operators are realized through elementary gates such as the Hadamard gate ($H$), which creates superposition, the phase gate ($S$), which introduces controlled phase shifts, and the controlled-NOT gate ($\text{CNOT}$), which generates entanglement between qubits. All as seen in \cref{quantum-gates}. These gates form a standard set of building blocks for constructing quantum circuits and implementing algorithms such as the VQE.
+In practical implementations, these operators are realized through elementary gates such as the Hadamard gate ($H$), which creates superposition, the phase gate ($S$), which introduces controlled phase shifts, and the CNOT gate, which generates entanglement between qubits. All as seen in \cref{quantum-gates}. These gates form a standard set of building blocks for constructing quantum circuits and implementing algorithms such as the VQE.
 \begin{equation}\label{quantum-gates}
 \begin{array}{cc}
 H = \frac{1}{\sqrt{2}}
@@ -61,7 +61,7 @@ S =
 \end{equation}
 
 \subsection{Tensor products and two-qubit states}
-When describing systems of multiple qubits, the Hilbert space of the composite system is constructed using tensor (Kronecker) products of the individual qubit states as seen in \cref{kronecker-products}. This allows basis states of multi-qubit systems to be written as products of the single-qubit computational basis states $\ket{0}$ and $\ket{1}$. For a two-qubit system the computational basis therefore consists of the four states $[\ket{00}\space\ket{01}\space\ket{10}\space\ket{11}]$, obtained through tensor products of the single-qubit states.
+When describing systems of multiple qubits, the Hilbert space of the composite system is constructed using tensor (Kronecker) products of the individual qubit states as seen in \cref{kronecker-products}. This allows basis states of multi-qubit systems to be written as products of the single-qubit computational basis states $\ket{0}$ and $\ket{1}$. For a two-qubit system the computational basis therefore consists of the four states $\{\ket{00},\ket{01},\ket{10},\ket{11}\}$, obtained through tensor products of the single-qubit states.
 \begin{equation}\label{kronecker-products}
 \begin{aligned}
 \ket{00} &= \ket{0} \otimes \ket{0} &
@@ -135,9 +135,9 @@ Furthermore, the Hamiltonian is decomposed into $\mathcal{H}=\mathcal{H}_0+\math
 Any $2\times2$ Hamiltonian can be expressed using the Pauli operator basis together with the identity operator. For the present system this leads to the identities seen in \cref{H0-H1-decomp} with \cref{mathcal-E-Omega}. 
 \begin{equation}\label{H0-H1-decomp}
 \begin{aligned}
-    H&=aI+b\sigma_x+c\sigma_y+d\sigma_z\\
-    H_0 &= \mathcal{E}I + \Omega\sigma_z \\
-    H_1 &= cI + \omega_z\sigma_z + \omega_x\sigma_x
+    &\mathcal{H}=a\textbf{I}+b\sigma_x+c\sigma_y+d\sigma_z\\
+    &\mathcal{H}_0 = \mathcal{E}\textbf{I} + \Omega\sigma_z \\
+    &\mathcal{H}_1 = c\textbf{I} + \omega_z\sigma_z + \omega_x\sigma_x
 \end{aligned}
 \end{equation}
 \begin{equation}\label{mathcal-E-Omega}
@@ -146,12 +146,12 @@ Any $2\times2$ Hamiltonian can be expressed using the Pauli operator basis toget
 
 Now, we can move on to the analytical eigenvalue solution, where the eigenvalues of the Hamiltonian are obtained from the characteristic equation in \cref{characteristic-equation}.
 \begin{equation}\label{characteristic-equation}
-    \det(H-EI)=0
+    \det(\mathcal{H}-E\textbf{I})=0
 \end{equation}
 
 For a general $2\times2$ Hamiltonian in \cref{general-hamiltonian} the resulting energy eigenvalues can be found in \cref{energy-eigenvalues}. Using this, the lowest eigenvalue corresponds to the ground state energy of the system.
 \begin{equation}\label{general-hamiltonian}
-    H=\begin{pmatrix}
+    \mathcal{H}=\begin{pmatrix}
         a&b\\b&d
     \end{pmatrix}
 \end{equation}
@@ -161,19 +161,24 @@ For a general $2\times2$ Hamiltonian in \cref{general-hamiltonian} the resulting
 
 To study the effects of interactions in \cref{hamilton-interaction}, the Hamiltonian is parametrised by a coupling parameter $\lambda\in[0,1]$, where the limits $\lambda=0$ and $\lambda=1$ correspond to the non-interacting and fully interacting systems respectively.
 \begin{equation}\label{hamilton-interaction}
-    H=H_0+\lambda H_1
+    \mathcal{H}=\mathcal{H}_0+\lambda \mathcal{H}_1
 \end{equation}
 
-The Hamiltonian is diagonalised numerically to obtain its eigenvalues and eigenvectors. For Hermitian matrices this is efficiently performed using the \texttt{numpy} package in \texttt{python} 
-\begin{lstlisting}
-    np.linalg.eigh(H)
+The Hamiltonian is diagonalised numerically to obtain its eigenvalues and eigenvectors. For Hermitian matrices this is efficiently performed using the \texttt{numpy} package in \texttt{python}, as seen in \cref{lst:numpy-diagonalization}.\newline
+
+\begin{lstlisting}[
+caption={Diagonalization of the Hamiltonian matrix $\mathcal{H}$ using NumPy's \texttt{np.linalg.eigh}, which computes the eigenvalues and eigenvectors of a Hermitian operator. This routine is used as the classical baseline for validating the quantum variational results.},
+label={lst:numpy-diagonalization},
+captionpos=b
+]
+np.linalg.eigh(H)
 \end{lstlisting}
 
 \subsection{Variational Quantum Eigensolver (VQE)}
 
-VQE is based on the variational principle, for any normalised trial state $\ket{\psi(\theta)}$, the expectation value of the Hamiltonian provides an upper bound to the true ground state energy. The goal VQE is therefore to minimize the energy expectation value ewith respect to the circuit parameter $\theta$ shown in \cref{minimum-expectation}. 
+VQE is based on the variational principle, for any normalised trial state $\ket{\psi(\theta)}$, the expectation value of the Hamiltonian provides an upper bound to the true ground state energy. The goal in using a VQE is therefore to minimize the energy expectation value ewith respect to the circuit parameter $\theta$ shown in \cref{minimum-expectation}. 
 \begin{equation}\label{minimum-expectation}
-    E_0\leq\min_\theta\bra{\psi(\theta)}H\ket{\psi(\theta)}
+    E_0\leq\min_\theta\bra{\psi(\theta)}\mathcal{H}\ket{\psi(\theta)}
 \end{equation}
 
 A parameterized quantum circuit $U(\theta)$ prepares a trial state from a simple initial computational basis state. By varying the parameters $\theta$, the circuit explores different candidate states in \cref{parameterized-psi}
@@ -183,14 +188,14 @@ A parameterized quantum circuit $U(\theta)$ prepares a trial state from a simple
 
 To evaluate the energy on a quantum computer, the Hamiltonian is expressed as a weighted sum of tensor products of Pauli operators, in \cref{c-P-pauli}. Each term can then be measured seperately on the quantum circuit, where $c_k$ are the real coefficients and $P_k$ are Pauli strings acting on the qubits.
 \begin{equation}\label{c-P-pauli}
-    H=\sum_k c_kP_k 
+    \mathcal{H}=\sum_k c_kP_k 
     \quad
     P_k\in\{I,X,Y,Z\}^{\otimes n}
 \end{equation}
 
 The VQE cost function is the expectation value of the Hamiltonian with respect to the trial state. Using the Pauli decomposition, the energy can be written as a sum of expectation values of Pauli operators in \cref{E-theta-bra-psi}.
 \begin{equation}\label{E-theta-bra-psi}
-    E(\theta)=\bra{\psi(\theta)}H\ket{\psi(\theta)} = \sum_k c_k \langle P_k \rangle_\theta
+    E(\theta)=\bra{\psi(\theta)}\mathcal{H}\ket{\psi(\theta)} = \sum_k c_k \langle P_k \rangle_\theta
 \end{equation}
 
 A classical optimizer updates the circuit parameter iteratively in order to reduce the energy expectation value. Conceptually, this can be written as an update rule, where $\eta$ is a learning rate or step size, as in \cref{nabla-theta}.
@@ -202,3 +207,13 @@ After convergence, the optimal parameters $\theta^*$ define the approximate grou
 \begin{equation}\label{ground-staet-E}
     E_{\text{VQE}} = E(\theta)
 \end{equation}
+
+\subsection{Implementation in \texttt{python}}
+
+All simulations and numerical verification routines were implemented in \texttt{python}. Linear algebra and numerical routines were handled using \texttt{numpy} and \texttt{scipy}, data handling with \texttt{pandas}, and visualization with \texttt{matplotlib} and \texttt{seaborn}. Quantum circuits and hybrid quantum–classical optimization were implemented using \texttt{PennyLane} and \texttt{Qiskit} \parencite{numpy,pennylane,qiskit}. Python has become a standard platform for numerical computing and quantum algorithm prototyping due to its extensive scientific ecosystem. 
+
+The full implementation and supporting code are available in the project repository \parencite{fys5419-repo}, with the development environment summarized in \cref{lst:python-environment} in the Appendix. Parts of the implementation follow examples and structures from the quantum machine learning teaching repository by \textcite{compphysics_qcml_repo}.
+
+\subsection{Use of AI-assisted development tools}
+
+AI-assisted programming tools were used during development for code generation, debugging, and documentation. These included large language models such as \texttt{ChatGPT} \parencite{chatgpt}, \texttt{Claude} \parencite{claude}, \texttt{Grok} \parencite{grok}, and \texttt{Gemini} \parencite{gemini}, as well as coding assistants such as \texttt{GitHub Copilot}, \texttt{Antigravity} and \texttt{Cursor} \parencite{copilot,google-antigravity,cursor}. 
