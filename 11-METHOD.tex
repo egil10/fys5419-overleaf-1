@@ -105,6 +105,22 @@ Similarly, tensor products between Pauli operators act on both qubits simultaneo
 \end{pmatrix}.
 \end{equation}
 
+While pure quantum states are written as state vectors, a more general description is given by density matrices. For a pure state $\ket{\psi}$ the density operator is given in \cref{density-matrix} and for a statistical ensemble $\{\ket{\psi_i},p_i\}$ it becomes as in \cref{mixed-density}.
+\begin{equation}\label{density-matrix}
+\rho = \ket{\psi}\bra{\psi},
+\end{equation}
+\begin{equation}\label{mixed-density}
+\rho = \sum_i p_i \ket{\psi_i}\bra{\psi_i}.
+\end{equation}
+
+For bipartite systems the state of a subsystem is obtained via the partial trace, in  \cref{partial-trace}, which is central when analysing entanglement. A standard measure of quantum uncertainty is the von Neumann entropy in \cref{von-neumann-entropy}, which vanishes for pure states and is positive for mixed states.
+\begin{equation}\label{partial-trace}
+\rho_A = \mathrm{Tr}_B(\rho_{AB}),
+\end{equation}
+\begin{equation}\label{von-neumann-entropy}
+\mathcal{S}(\rho) = -\mathrm{Tr}(\rho \log \rho),
+\end{equation}
+
 \subsection{Eigenvalue analysis}
 
 The stationary Schrödinger equation defines the energy spectrum of a quantum system. The Hamiltonian operator acting on a quantum state produces the same state scaled by its corresponding energy eigenvalue, as seen in \cref{h-psi-e-psi}, where $\mathcal{H}$ is the Hamiltonian and $E$ the energy eigenvalue and $\ket{\psi}$ the corresponding eigenstate.
@@ -207,6 +223,37 @@ After convergence, the optimal parameters $\theta^*$ define the approximate grou
 \begin{equation}\label{ground-staet-E}
     E_{\text{VQE}} = E(\theta)
 \end{equation}
+
+The choice of parameterized circuit $U(\theta)$ determines the family of states explored by the VQE and therefore strongly influences the quality of the variational solution. For a single qubit, a minimal ansatz consists of a single rotation gate is seen in \cref{ry-ansatz}.
+\begin{equation}\label{ry-ansatz}
+\ket{\psi(\theta)} = R_y(\theta)\ket{0}
+= \cos\frac{\theta}{2}\ket{0} + \sin\frac{\theta}{2}\ket{1}.
+\end{equation}
+
+For two qubits, a common hardware-efficient architecture combines single-qubit rotations with an entangling gate. A simple example is shown in \cref{two-qubit-ansatz}.
+\begin{equation}\label{two-qubit-ansatz}
+\ket{\psi(\boldsymbol{\theta})} =
+\big(R_y(\theta_3)\otimes R_y(\theta_4)\big)
+\,\mathrm{CNOT}\,
+\big(R_y(\theta_1)\otimes R_y(\theta_2)\big)\ket{00}.
+\end{equation}
+
+\subsection{The Lipkin model}
+
+The Lipkin--Meshkov--Glick (LMG) model describes $N$ fermions distributed over two $N$-fold degenerate energy levels separated by an energy $\varepsilon$. In terms of quasispin operators the Hamiltonian is written as in \cref{lipkin-hamiltonian}.
+\begin{equation}\label{lipkin-hamiltonian}
+    \mathcal{H} = \varepsilon J_z + \frac{1}{2}V(J_+^2 + J_-^2)
+\end{equation}
+
+The operators $J_z, J_+, J_-$ satisfy the $\mathfrak{su}(2)$ algebra and act within the angular momentum sector $J=N/2$. The first term represents the single-particle energy splitting, while the interaction term scatters particle pairs between the two levels. To simulate the model on a quantum computer, the quasispin operators are mapped to Pauli operators acting on $N$ qubits. This yields the qubit Hamiltonian shown in \cref{lipkin-pauli-hamiltonian}.
+\begin{equation}\label{lipkin-pauli-hamiltonian}
+    \mathcal{H} =
+    \frac{\varepsilon}{2}\sum_{i=1}^{N} Z_i
+    +
+    \frac{V}{2}\sum_{i<j}(X_i X_j - Y_i Y_j)
+\end{equation}
+
+This Pauli representation allows the Lipkin Hamiltonian to be directly evaluated within the VQE framework introduced in the following subsection.
 
 \subsection{Implementation in \texttt{python}}
 

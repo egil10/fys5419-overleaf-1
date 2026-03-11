@@ -3,6 +3,66 @@
 \subsection{Single-Qubit Operations and Bell State Entanglement}
 \label{subsec:single-qubit-bell}
 
+Applying the Pauli operators defined in \cref{section:methods} confirms the expected behaviour.
+
+\begin{flalign}
+\sigma_x \ket{0} &= \ket{1} & \sigma_x \ket{1} &= \ket{0} && \text{bit-flip} \\
+\sigma_y \ket{0} &= i\ket{1} & \sigma_y \ket{1} &= -i\ket{0} && \text{bit-flip + phase} \\
+\sigma_z \ket{0} &= \ket{0} & \sigma_z \ket{1} &= -\ket{1} && \text{phase-flip}
+\end{flalign}
+
+The Hadamard gate (H) maps computational basis states to equal superpositions, $H\ket{0}=\ket{+}$ and $H\ket{1}=\ket{-}$. The phase gate introduces a relative phase of $i$ on $\ket{1}$ while leaving $\ket{0}$ unchanged. In our results, both gates act as expected. 
+
+Starting from $\ket{00}$, the circuit $H\otimes\textbf{I}$ followed by CNOT produced \cref{h-otimes-I-cnot}, and with repeated measurement of $\ket{\Phi^+}$ with $50$ runs times $1000$ shots yielded \cref{tab:measurement-probabilities}.
+\begin{equation}\label{h-otimes-I-cnot}
+\ket{00} 
+\xrightarrow{H\otimes\textbf{I}} 
+\frac{1}{\sqrt{2}}\left(\ket{00}+\ket{10}\right)
+\xrightarrow{\text{CNOT}}
+\frac{1}{\sqrt{2}}\left(\ket{00}+\ket{11}\right)
+=
+\ket{\Phi^+}
+\end{equation}
+\begin{table}[h]
+\centering
+\begin{tabular}{ccc}
+\hline
+Outcome & $\mu$ & $\sigma$ \\
+\hline
+$\ket{00}$ & 0.4988 & 0.018 \\
+$\ket{01}$ & 0.0000 & 0.000 \\
+$\ket{10}$ & 0.0000 & 0.000 \\
+$\ket{11}$ & 0.5012 & 0.018 \\
+\hline
+\end{tabular}
+\caption{Mean measurement probabilities ($\mu$) and standard deviations ($\sigma$) obtained from repeated circuit evaluations.}
+\label{tab:measurement-probabilities}
+\end{table}
+
+The outcomes are exclusively $\ket{00}$ and $\ket{11}$ with equal probability, which is the exact expected signature of the $\ket{\Phi^+}$ Bell state. The two qubits are perfectly correlated, measuring one immediately determines the other. The statistical fluctuations of $\sigma=\pm0.018$ are consistent with the expected noise, as in \cref{expected-noise}
+\begin{equation}\label{expected-noise}
+    \sqrt{\frac{p(1-p)}{N_\text{shots}}}\approx0.016
+\end{equation}
+
+Computing the von Neumann entropy $\mathcal{S}=-\text{Tr}\left(\rho_A\log_2\rho_A\right)$ in \cref{tab:entanglement-entropy-states}. 
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\hline
+State & Type & $S$ \\
+\hline
+$\ket{\Phi^{+}}$ & Maximally entangled & 1.000 \\
+$\ket{\Phi^{-}}$ & Maximally entangled & 1.000 \\
+$\ket{\Psi^{+}}$ & Maximally entangled & 1.000 \\
+$\ket{\Psi^{-}}$ & Maximally entangled & 1.000 \\
+$\ket{00}$ & Product state & 0.000 \\
+$\ket{+}\otimes\ket{0}$ & Product (superposition) & 0.000 \\
+\hline
+\end{tabular}
+\caption{Von Neumann entropy $S$ for several two-qubit states. The Bell states $\ket{\Phi^{\pm}}$ and $\ket{\Psi^{\pm}}$ are maximally entangled with $S=1$, while product states have vanishing entropy.}
+\label{tab:entanglement-entropy-states}
+\end{table}
+
 \subsection{Two-Level System: Exact Diagonalization vs.\ VQE}
 \label{subsec:two-level-vqe}
 
