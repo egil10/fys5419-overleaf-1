@@ -13,7 +13,7 @@ Applying the Pauli operators defined in \cref{section:methods} confirms the expe
 
 The Hadamard gate (H) maps computational basis states to equal superpositions, $H\ket{0}=\ket{+}$ and $H\ket{1}=\ket{-}$. The phase gate introduces a relative phase of $i$ on $\ket{1}$ while leaving $\ket{0}$ unchanged. In our results, both gates act as expected. 
 
-Starting from $\ket{00}$, the circuit $H\otimes\textbf{I}$ followed by CNOT produced \cref{h-otimes-I-cnot}, and with repeated measurement of $\ket{\Phi^+}$ with $50$ runs times $1000$ shots yielded \cref{tab:measurement-probabilities}.
+Starting from $\ket{00}$, the circuit $H\otimes\textbf{I}$ followed by CNOT produced \cref{h-otimes-I-cnot}, and with repeated measurement of $\ket{\Phi^+}$ with $50$ runs times $1000$ shots yielded the table seen in \cref{tab:measurement-probabilities}.
 \begin{equation}\label{h-otimes-I-cnot}
 \ket{00} 
 \xrightarrow{H\otimes\textbf{I}} 
@@ -43,9 +43,15 @@ The outcomes are exclusively $\ket{00}$ and $\ket{11}$ with equal probability, w
 \begin{equation}\label{expected-noise}
     \sqrt{\frac{p(1-p)}{N_\text{shots}}}\approx0.016
 \end{equation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-a_measurement_dist.pdf}
+    \caption{Measurement Distribution}
+    \label{fig:figures/part-a_measurement_dist.pdf}
+\end{figure}
 
 Computing the von Neumann entropy $\mathcal{S}=-\text{Tr}\left(\rho_A\log_2\rho_A\right)$ in \cref{tab:entanglement-entropy-states}. 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{lcc}
 \hline
@@ -66,8 +72,147 @@ $\ket{+}\otimes\ket{0}$ & Product (superposition) & 0.000 \\
 \subsection{Two-Level System: Exact Diagonalization vs.\ VQE}
 \label{subsec:two-level-vqe}
 
+Using parameters $E_1=0,\space E_2=4,\space V_{11}=3,\space V_{22}=-3,\space V_{12}=V_{21}=0.2$ the Pauli decompositions are shown in \cref{tab:pauli-decomposition-coefficients}.
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\hline
+Coefficient & Value & Expression \\
+\hline
+$\mathcal{E}$ & $2.0$ & $(E_1 + E_2)/2$ \\
+$\Omega$ & $-2.0$ & $(E_1 - E_2)/2$ \\
+$c$ & $0.0$ & $(V_{11} + V_{22})/2$ \\
+$\omega_z$ & $3.0$ & $(V_{11} - V_{22})/2$ \\
+$\omega_x$ & $0.2$ & $V_{12}$ \\
+\hline
+\end{tabular}
+\caption{Pauli decomposition coefficients obtained from the project parameters $E_1=0$, $E_2=4$, $V_{11}=3$, $V_{22}=-3$, and $V_{12}=V_{21}=0.2$.}
+\label{tab:pauli-decomposition-coefficients}
+\end{table}
+
+The Eigenvalues $E_\pm(\lambda)$ are computed both analytically and numerically (using \texttt{numpy.linalg.eigh}) over $101$ values of $\lambda\in[0,1]$, where the maximum discrepency between the two methods are $\approx10^{-15}$, as shown in \cref{fig:figures/part-b_eigenvalues.pdf}. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-b_eigenvalues.pdf}
+    \caption{Eigenvalues}
+    \label{fig:figures/part-b_eigenvalues.pdf}
+\end{figure}
+
+The spectrum shows and avoided crossing at $\lambda=\frac{2}{3}$, where are this point, the diagonal matrix elements cross $\left(3\lambda=4-3\lambda\right)$, but the off-diagnoal coupling $V_{12}=0.2$ prevents a true degeneracy, creating a gap of $\Delta E\approx0.27$. 
+
+Tracking the eigenvector decomposition of the ground state as a function of $\lambda$, as seen in \cref{tab:lambda-probabilities}.
+\begin{table}[H]
+\centering
+\begin{tabular}{cccc}
+\hline
+$\lambda$ & $\mathrm{Prob}(\ket{0})$ & $\mathrm{Prob}(\ket{1})$ & Character \\
+\hline
+0.0   & 100\% & 0\%   & Pure $\ket{0}$ \\
+$\tfrac{2}{3}$ & $\sim$50\% & $\sim$50\% & Maximally mixed \\
+1.0   & $\sim$1\%  & $\sim$99\% & Dominated by $\ket{1}$ \\
+\hline
+\end{tabular}
+\caption{Measurement probabilities of the computational basis states $\ket{0}$ and $\ket{1}$ as a function of the interaction parameter $\lambda$.}
+\label{tab:lambda-probabilities}
+\end{table}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-b_eigenvector_mixing.pdf}
+    \caption{Eigenvector Mixing}
+    \label{figures/part-b_eigenvector_mixing.pdf}
+\end{figure}
+
+The ground state character inverts as $\lambda$ passes through the crossing point. Below $\lambda=\frac{2}{3}$ it is predominantly $\ket{0}$, and above, $\ket{1}$ dominates. This transitionis smooth because the coupling $V_{12}$ mixes the two basis states. At $\lambda=1$ only $\approx1\%$ of $\ket{0}$ remains, which is consistent with the theoretical prediction.
+
+The trial state is shown in \cref{trial-state}, where the single-parameter rotation spans the full real single-qubit Hilbert space, since the Hamiltonian is real and symmetric, $R_y$ is exactly sufficient.
+\begin{equation}\label{trial-state}
+    \ket{\psi(\theta)} = R_y(\theta)\ket{0} = \cos\left(\frac{\theta}{2}\right)+\sin\left(\frac{\theta}{2}\right)\ket{1}
+\end{equation}
+
+The energy is evaluated as $E(\theta)=c_0+c_z\langle\sigma_z\rangle_\theta+c_x\langle\sigma_x\rangle_\theta$ where $\langle\sigma_x\rangle$ is obtained from computational-basis measurement and $\langle\sigma_x\rangle$ requires a Hadamard rotation before measurement. 
+
+The VQE is swept over $\lambda\in[0,1]$. Both the ground state and the excited staet acceced via $\theta_\text{opt}+\pi$ are computed. The VQE markers lie exactly on the exact diagonalization curves for both eigenvalues. Precision is shown in \cref{fig:figures/part-c_vqe_spectrum_error.pdf} where the max error for the ground state is $5.41\times10^{-11}$ and excited state is same order.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-c_vqe_full_spectrum.pdf}
+    \caption{VQE Full Spectrum}
+    \label{fig:figures/part-c_vqe_full_spectrum.pdf}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-c_vqe_spectrum_error.pdf}
+    \caption{Caption}
+    \label{fig:figures/part-c_vqe_spectrum_error.pdf}
+\end{figure}
+
+As the error remains below $10^{-10}$ across the entire $\lambda$ range, this confirms that (i) the $R_y$ ansatz is exact for this $1$-qubit problem, (ii) the BFGS optimizer converges to the global minimum reliably, and (iii) the one-parameter landscape has no local minima. 
+
+An independent VQE-implementation using \texttt{Qiskit}'s \texttt{SparsePauliOp} and \texttt{Statevector} produces identical results, validating the manual implementation.
+
 \subsection{Two-Qubit System and Interaction-Driven Entanglement}
 \label{subsec:two-qubit-entanglement}
+
+The two-qubit Hamiltonian with parameters $H_x=2.0,\space H_z=3.0,\space \epsilon_{00}=0.0,\space \epsilon_{10}=2.5,\space \epsilon_{01}=2.5,\space \epsilon_{11}=7.0$ is diagonalized over $\lambda\in[0,1]$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-d_eigenvalues.pdf}
+    \caption{Eigenvalues}
+    \label{fig:figures/part-d_eigenvalues.pdf}
+\end{figure}
+
+At $\lambda=0$ the eigenvalues are the non-interacting energies $0.0,\space 2.5,\space 6.5,\space 7.0$. As $\lambda$ increases, the $\sigma_x\otimes\sigma_x$ interaction shifts the diagonal elements, pushing $\ket{00}$ and $\ket{11}$ up while pulling $\ket{01}$ and $\ket{10}$ down. The $\sigma_x\otimes\sigma_x$ coupling creates off-diagonal mixing between $\ket{00}\leftrightarrow\ket{11}$ and $\ket{01}\leftrightarrow\ket{10}$ producing avoided crossings. the block structure of the Hamiltonian, two independent $2\times2$ blocks, are reflected in the pairwise behaviours of the energy levels.
+
+The von Neumann entropy is computed for all four eigenstates, not just the ground state. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-d_entropy.pdf}
+    \caption{Entropy}
+    \label{fig:figures/part-d_entropy.pdf}
+\end{figure}
+
+Some key observations; (i) zero entropy, where at $\lambda=0$ all eigenstates are computational basis states (product states), so $\mathcal{S}=0$; (ii) monotonic increase, where as $\lambda$ grows the off-diagonal interaction mixes the basis states, generating entanglement and the entropy increases smoothly; (iii) sharp jump at the avoided crossing, near the avoided crossing region, the entropy shows a rapid increase, the ground state transitions from being dominated by a single basis state to being strongly entangled superposition, a small change in $\lambda$ produces a dramatic shift in quantum correlations, (iv) Hamiltonian-driven entanglement, the entanglement is not externally imposed, it emerges directly from the competition between the diagonal spacing and the off-diagonal coupling $H_x$, when the coupling becomes comparable to the energy gap, entanglement grows sharply. 
+
+The non-interacting Hamiltonian $\mathcal{H}_0=\text{diag}\left(\epsilon_{00},\space \epsilon_{01},\space \epsilon_{10},\space \epsilon_{11}\right)$ is decomposed into four Pauli strings, as seen in \cref{four-pauli-string}, with $h_0=4.0,\space h_1=0.25,\space h_2=-2.75,\space h_3=-0.5$. The interaction adds $(h_3+\lambda\mathcal{H}_z),\space ZZ+\lambda\mathcal{H}_x,\space XX$, giving $5$ Pauli terms total.
+\begin{align}\label{four-pauli-string}
+    & \mathcal{H}_0=h_0 \\
+    & II + h_1 \\
+    & ZI+h_2 \\
+    & IZ+h_3 \\
+    & ZZ
+\end{align}
+
+The hardware-efficient ansatz consists of two $R_y$ rotation layers seperated by a CNOT entangler
+\begin{equation}
+    \ket{\psi(\theta)} = \left( R_y(\theta_3) \otimes R_y(\theta_4) \right) \cdot \text{CNOT} \cdot \left( R_y(\theta_1) \otimes R_y(\theta_2) \right) \ket{00}
+\end{equation}
+
+This gives $4$ variational parameters. The $R_y$ rotations span the real subspace of each qubit, and the CNOT provides the entanglement needed to represent correlated states. For a $4$-dimensional real Hilbert space, $4$ real parameters are sufficient. 
+
+The VQE sweep over $\lambda\in[0,1]$ compares three approaches, in \cref{figures/part-e_vqe_comparison.pdf}, where all three curves, exact, VQE, and Qiskit VQE, are indistinguishable. With the precision, the max absolute error for manual VQE and Qiskit VQE are both $\approx 10^{-10}$. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-e_vqe_comparison.pdf}
+    \caption{VQE Comparison}
+    \label{figures/part-e_vqe_comparison.pdf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-e_vqe_precision.pdf}
+    \caption{VQE Precision}
+    \label{figures/part-e_vqe_precision.pdf}
+\end{figure}
+
+The $R_y$-CNOT-$R_y$ circuit can represent any real two-qubit state. This means the VQE achieves exact results, the error is purely from the optimizer, not the ansatz. 
+
+BFGS converges reliably from the zero-parameter initialization $\theta=(0,0,0,0)$. No random restarts were needed, suggesting a smooth optimization landscape for this system. 
+
+The exact match between the manual implementation and Qiskit validates the VQE-code, both correctly handle the ansatz, Pauli measurements, and optimization loop.
+
+The VQE implicitly captures the entanglement structure of the ground state, as $\lambda$ increases through the crossing region, the optimal CNOT angle changes to produce the appropriate entanglement, tracked by the entropy analysis from the first part. 
 
 \subsection{The Lipkin Model}
 \label{subsec:lipkin-model}
