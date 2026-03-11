@@ -216,3 +216,122 @@ The VQE implicitly captures the entanglement structure of the ground state, as $
 
 \subsection{The Lipkin Model}
 \label{subsec:lipkin-model}
+
+The Lipkin Hamiltonian is built using the quasispin operators $J_z,\space J_+,\space J_-$ with the pair-scattering interaction $(W=0)$, where the resulting matrices are shown for $J=1$ with $N=2$ particles and $3\times3$ in \cref{h_j=1_matrix} and $J=2$ with $N=4$ particles and $5\times5$ in \cref{h_j=2_matrix}.
+
+The $m=0$ state is decoupled, it is an eigenstate with energy $0$ for all $V$. The interaction only connects $m=-1 \leftrightarrow m=+1$, the $\Delta m = \pm 2$ selection rule from $J_+^2+J_-^2$.
+
+\begin{equation}\label{h_j=1_matrix}
+    H_{J=1} = \begin{pmatrix}
+        -\epsilon & 0 & -V \\
+        0 & 0 & 0 \\
+        -V & 0 & \epsilon
+    \end{pmatrix}
+\end{equation}
+
+The chequerboard pattern $\Delta m = \pm 2$ persists, decoupling even-$m$ and odd-$m$ states into separate blocks.
+
+\begin{equation}\label{h_j=2_matrix}
+    H_{J=2} = 
+    \begin{pmatrix}
+        -2\epsilon & 0 & \sqrt{6}V & 0 & 0 \\
+        0 & -\epsilon + 3W & 0 & 3V & 0 \\
+        \sqrt{6}V & 0 & 4W & 0 & \sqrt{6}V \\
+        0 & 3V & 0 & \epsilon+3W & 0 \\
+        0 & 0 & \sqrt{6}V & 0 & 2\epsilon
+    \end{pmatrix}
+\end{equation}
+
+Mapping the quasispin operators to $N=2$ qubits gives 
+\begin{equation}
+    H_{J=1}=\frac{\epsilon}{2}(ZI+IZ)+\frac{V}{2}(XX-YY)
+\end{equation}
+
+For $J=1$, two-qubit mapping. The $4\times4$ Pauli Hamiltonian contains both the $J=1$ tripled $d=3$ and $J=0$ singlet $d=1$. Projecting onto the triplet subspace, spanned by $\ket{11}$ $(m=-1)$, $\frac{\ket{01}+\ket{10}}{\sqrt{2}}$ $(m=0)$ and $\ket{00}$ $(m=+1)$ exactly covers the $3\times3$ quasispin matrix.
+
+For $J=2$, four-qubit mapping. 
+
+$$\boxed{H_{J=2} = \frac{\varepsilon}{2}\sum_{i=1}^{4} Z_i + \frac{V}{2}\sum_{i<j}(X_i X_j - Y_i Y_j)}$$
+
+This gives $4$ single-qubit $Z$ terms and $12$ two-qubit terms ($XX$ and $YY$ for each of the $6$ pairs), totalling $16$ Pauli-strings. The $16\times16$ Hilbert space contains $J=0,1,2$ sectors. The five $J=2$ eigenvalues were extracted from the full Pauli spectrum and verified against the quasispin reference. 
+
+The eigenvalues are computed over $V\in[0,1.5]$ with $\epsilon=1$ and $W=0$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-f_j1.pdf}
+    \caption{J1}
+    \label{figures/part-f_j1.pdf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-f_j2.pdf}
+    \caption{J2}
+    \label{figures/part-f_j2.pdf}
+\end{figure}
+
+Both spectra show the ground state energy decreasing with increasing $V$, reflecting energetically favorable pair correlations introduced by the interaction.
+
+The Hartree-Fock energy of the Lipkin model is \cref{hartree-fock-energy} where $\tilde{V}=\frac{(N-1)V}{\epsilon}$, and the critical interaction strengths are for $N=1\space(J=1)=1.000$ and $N=4\space(J=2)=0.333$.
+\begin{equation}\label{hartree-fock-energy}
+E_{\text{HF}} = 
+\begin{cases}
+\frac{-N\epsilon}{2} & \text{if } \tilde{V} \leq 1 \\
+\frac{-N\epsilon}{4}\left( \tilde{V}+\frac{1}{\tilde{V}} \right) & \text{if } \tilde{V} > 1 
+\end{cases}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-f_scaling.pdf}
+    \caption{Scaling}
+    \label{fig:figures/part-f_scaling.pdf}
+\end{figure}
+
+The energy per particle $\frac{E_0}{N}$ approaches the Hartree-Fock curve as $N$ increases, consistent with HF becoming exact in the thermodynamic limit. Below $V_c$ HF gives the exact answer, the ground state is a single Slater determinant. Above $V_c$ HF systematically overestimates the energy, the correlation energy is missing. 
+
+A hardware-efficient ansatz with $R_y$ rotations and CZ entanglement is used and shown in \cref{tab:vqe-circuit-config}. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cccccc}
+\hline
+Sys & Qbts & Depth & Params & Restarts & Opt \\
+\hline
+$J=1$ & 2 & 2 & 4 & 3 & L-BFGS-B \\
+$J=2$ & 4 & 4 & 16 & 4 & L-BFGS-B \\
+\hline
+\end{tabular}
+\caption{Variational quantum circuit configurations used for the Lipkin model simulations.}
+\label{tab:vqe-circuit-config}
+\end{table}
+
+The ansatz uses alternating entanglement layers, even pairs $(1,0),\space(2,3)$ and odd pairs $(1,2),\space(3,4)$ plus wrap-around to ensure full qubit connectivity after two layers. Multiple random restarts mitigate local minima. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-g_vqe_manybody.pdf}
+    \caption{VQE Manybody}
+    \label{fig:figures/part-g_vqe_manybody.pdf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/part-g_vqe_precision.pdf}
+    \caption{VQE Precision}
+    \label{fig:figures/part-g_vqe_precision.pdf}
+\end{figure}
+
+With this we find a max error at $\approx10^{-11}$ and $\approx10^{-2}$ for $J=1\space(N=2)$ and $J=2\space(N=4)$ respectively, and with subsequent mean error of $\approx10^{-12}$ and $\approx10^{-3}$.
+
+$J=1$ exact accuracy.
+
+$J=2$ optimization challenges.
+
+Possible improvements.
+
+Phase transition captured.
+
+Scaling.
+
